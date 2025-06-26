@@ -1,0 +1,56 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 #클라이언트가 접속할 포트
+      ZOOKEEPER_TICK_TIME: 2000 #Zookeeper 내부 heartbeat 간격 (ms)
+
+  kafka: #서비스 이름
+    image: confluentinc/cp-kafka:7.5.0
+    ports:
+      - "9092:9092"  #Kafka가 외부와 통신할 수 있도록 포트 9092 노출
+    depends_on:
+      - zookeeper #Kafka는 Zookeeper가 먼저 실행되어야 동작
+    environment:
+      KAFKA_BROKER_ID: 1 #Kafka 브로커 고유 ID
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 #Zookeeper에 연결할 주소
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://host.docker.internal:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-cli: #kafka-console-consumer.sh, kafka-topics.sh 등)를 실행할 수 있는 CLI 도구 컨테이너
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-cli
+    entrypoint: /bin/sh #쉘 모드로 열리며, 수동으로 명령어 실행 가능
+    tty: true
+    depends_on:
+      - kafka
+
+  elasticsearch: #로그 데이터를 저장하고 검색 가능한 구조로 색인화하는 데이터 저장소
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.16
+    environment:
+      - discovery.type=single-node #클러스터 구성이 아닌 단일 노드로 실행
+    ports:
+      - "9200:9200" #Elasticsearch의 REST API 접근 포트
+
+  kibana: #Elasticsearch의 데이터를 시각화하는 UI
+    image: docker.elastic.co/kibana/kibana:7.17.16
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch #Elasticsearch가 먼저 실행되어야 Kibana가 시작됨
+
+  logstash: #Kafka에서 로그를 읽어 Elasticsearch에 전달하는 로그 처리기
+    image: docker.elastic.co/logstash/logstash:7.17.16
+    ports:
+      - "5044:5044"
+      - "9600:9600" # Logstash API (모니터링용)
+    volumes: #호스트의 logstash.conf를 컨테이너 내부로 마운트
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on: #Kafka와 Elasticsearch가 실행된 후 시작
+      - kafka
+      - elasticsearch
