@@ -58,22 +58,22 @@ Kafka는 대용량의 로그나 데이터를 **실시간으로 수집하고 전�
 ### 🔹 실행 화면
 
 #### - 로그 데이터를 항목별로 정리하여 한눈에 파악
-![log_1](./img/log_1.png)
+![log_1](./docs/img/log_1.png)
 
 #### - 수집된 전체 로그 중 **선택한 필드 기반(예: 로그 레벨, 에러 유형 등)**으로 로그를 분류하여 비율 분석
-![log_2](./img/log_2.png)
+![log_2](./docs/img/log_2.png)
 
 #### - 선택한 필드 기반 로그를 비율을 여러 차트 형태로 표시
-![log_3](./img/log_3.png)
+![log_3](./docs/img/log_3.png)
 
 #### - 특정 필드를 기준으로 필터링하여 불필요한 데이터를 제외하고 원하는 로그만 추려서 분석가능
-![log_4](./img/log_4.png)
+![log_4](./docs/img/log_4.png)
 
 #### - 시간대별로 로그 파악
-![log_5](./img/log_5.png)
+![log_5](./docs/img/log_5.png)
 
 #### - 조회한 로그 데이터를 CSV(엑셀) 형식으로 내보내기(export)가능
-![log_6](./img/log_6.png)
+![log_6](./docs/img/log_6.png)
 ---
 ### 🔹 실행 순서
 1. Docker를 통해 컨테이너들을 실행
