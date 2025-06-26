@@ -82,10 +82,10 @@ Kafka는 대용량의 로그나 데이터를 **실시간으로 수집하고 전�
 4. `Add integrations` 버튼 클릭
 5. 좌측 상단 햄버거 메뉴 클릭 → `Analytics > Discover` 이동
 6. `Create index pattern` 클릭
-   ![Kafka Docker 설치 폴더](./img/setup0.png)
+   ![Kafka Docker 설치 폴더](./docs/img/setup0.png)
 7. Name에 `app-logs-*` 입력
 8. @timestamp 선택
-   ![Kafka Docker 설치 폴더](./img/setup2.png)
+   ![Kafka Docker 설치 폴더](./docs/img/setup2.png)
 9. `Create index pattern` 클릭
 10. 좌측 상단 햄버거 메뉴 클릭 → `Analytics > Discover` 이동
 ---
